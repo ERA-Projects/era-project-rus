@@ -1,3 +1,18 @@
+### Версия 2.118
+
+>[!WARNING]
+> Не обновляйте HD-mod, так как его новая версия конфликтует с некоторыми плагинами;
+
+#### Game Enhancement Mod:
+- Исправлена ​​ошибка, из-за которой в некоторых сценариях при воспроизведении боя возникали неполадки в данных об опыте существ (влияла на опцию «Метаморф»).
+
+#### WoG Scripts:
+- Death Chamber: Now the hostile spell casting before action is only triggered when it's a monster action (Walk/Defend/Walk and Attack/Shoot).
+
+#### Other:
+- прочие мелкие исправления;
+
+
 ### Версия 2.117
 
 >[!NOTE]
