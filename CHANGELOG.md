@@ -1,3 +1,10 @@
+### Версия 2.128
+
+### WoG:
+- Обновлён плагин "RMG_CustomizeObjectProperties.era":
+	- Исправлена генерация WoG-объектов;
+
+
 ### Версия 2.127
 
 #### Advanced Classes Mod:
