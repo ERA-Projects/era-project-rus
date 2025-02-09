@@ -6,6 +6,7 @@ BattleSpeed
 Spells Description
 Unleashed Editor
 Game Enhancement Mod
+WoG Rus
 WoG Scripts
 WoG Scripts Rus
 WoG Fix Lite
@@ -14,6 +15,5 @@ ERA Scripts Rus
 10SSkills
 AMER_HumanAI
 Enhanced Henchmen
-WoG Rus
 Random wallpaper
 XXL
