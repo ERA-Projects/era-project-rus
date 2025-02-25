@@ -24,18 +24,18 @@
 		"era.artifacts.[art_id].name": string,
 		"era.artifacts.[art_id].description": string,
 		"era.artifacts.[art_id].event": string
-		```
+		```
 		- для Существ доступны замена имени в единственном числе, множественном числе и описания способностей:
 		```
 		"era.monsters.[monster_id].name.singular": string,
 		"era.monsters.[monster_id].name.plural": string,
 		"era.monsters.[monster_id].name.description": string
-		```
+		```
 		- для Объектов Карты Приключений доступны замена имени стандартных объектов и Жилищ существ (тип 17):
 		```
 		"era.objects.[object_type]": string,
 		"era.objects.17.[object_subtype]": string
-		```
+		```
 	- в дальнейшей возможна поддержка большего количества txt-файлов (в том числе и связанных с героями);
 
 #### WoG Scripts:
@@ -1211,7 +1211,7 @@
 #### Other:
 - Добавлен хук (xxx_OnResetHero) для работы с переменными героя (или глобальными переменными героя). Это должно помочь сбросить выбор вторичных навыков/артефактов, когда герой уволен/побежден и возрождается в тавернах.
 - добавлены пропущенные данные кампаний Клинка Армагеддона
-
+
 
 ### Версия 2.106
 
