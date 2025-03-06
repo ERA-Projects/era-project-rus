@@ -41,7 +41,7 @@ jobs:
       - name: Create archive
         if: env.NEW_VERSION == 'true'
         run: |
-          zip -r era-project-${{ env.VERSION }}.zip . -x ".git*" "some_large_folder/*"
+          zip -r era-project-rus-${{ env.VERSION }}.zip . -x ".git*" "some_large_folder/*"
 
       - name: Create draft release
         if: env.NEW_VERSION == 'true'
