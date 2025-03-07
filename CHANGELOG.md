@@ -1,3 +1,36 @@
+### Версия 2.165
+
+#### ERA:
+- ## обновление ядра era.dll без изменения версии:
+	- Экспортированы следующие функции в era.dll:
+		- процедура LogMemoryState
+		- Добавляет запись в файл "log.txt" в следующем виде: >> [EventSource]: [Operation] #13#10 [Description]:
+			- функция WriteLog (EventSource, Operation, Description: pchar): TInt32Bool;
+			- Пример:
+			```
+			WriteLog("SaveGame", "Save monsters section", "Failed to detect monster array size") *)
+			```
+
+#### Game Enhancement Mod:
+- Следующие плагины были обновлены для поддержки менеджера памяти ERA:
+	- "ChooseAttack.dll"
+	- "GameplayEnhancementsPlugin.era"
+
+#### WoG:
+- Следующие плагины были обновлены для поддержки менеджера памяти ERA:
+	- "wog native dialogs.era"
+	- "game bug fixes extended.dll"
+	- "RMG_CustomizeObjectProperties.era"
+	- "ERA_MultilingualSupport.era"
+- обновлен плагин "ERA_MultilingualSupport.era" до версии 1.04:
+	- исправлена утечка памяти диалога
+- обновлен плагин "RMG_CustomizeObjectProperties.era" до версии 1.14:
+	- исправлена утечка памяти диалога
+
+#### other:
+- обновлен ERA SDK. Путь "/Tools/Era/SDK";
+
+
 ### Версия 2.164
 
 #### Game Enhancement Mod:
