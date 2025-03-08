@@ -64,7 +64,7 @@ jobs:
         with:
           tag_name: ${{ needs.check-version.outputs.VERSION }}
           release_name: Release ${{ needs.check-version.outputs.VERSION }}
-          body: "[Changelog](https://github.com/ERA-Projects/era-project-rus/blob/main/CHANGELOG.md#version-${{ needs.check-version.outputs.CLEAN_VERSION }})"
+          body: "[Список изменений](https://github.com/ERA-Projects/era-project-rus/blob/main/CHANGELOG.md#version-${{ needs.check-version.outputs.CLEAN_VERSION }})"
           draft: true
           prerelease: false
         env:
