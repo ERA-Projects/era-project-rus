@@ -105,5 +105,5 @@ jobs:
         with:
           webhook_id: ${{ secrets.DISCORD_WEBHOOK_ID }}
           webhook_token: ${{ secrets.DISCORD_WEBHOOK_TOKEN }}
-          message: "**Сборка в лаунчере обновлена до версии ${{ needs.check-version.outputs.VERSION }}**\nБольшое СПАСИБО за ваши донаты! Они стимулируют меня работать над сборкой!\n## [Список изменений на GitHub](<https://github.com/ERA-Projects/era-project-rus/blob/main/CHANGELOG.md#%D0%B2%D0%B5%D1%80%D1%81%D0%B8%D1%8F-${{ needs.check-version.outputs.CLEAN_VERSION }}>)\nПожалуйста, запустите ⁠<#832999696858480670>, чтобы получить обновление."
+          message: "**Сборка в лаунчере обновлена до версии ${{ needs.check-version.outputs.VERSION }}**\nБольшое СПАСИБО за ваши донаты! Они стимулируют меня работать над сборкой!\n## [Список изменений на GitHub](<https://github.com/ERA-Projects/era-project-rus/blob/main/CHANGELOG.md#%D0%B2%D0%B5%D1%80%D1%81%D0%B8%D1%8F-${{ needs.check-version.outputs.CLEAN_VERSION }}>)\nПожалуйста, запустите <#832999696858480670>, чтобы получить обновление."
           file: "CHANGELOG.md"
