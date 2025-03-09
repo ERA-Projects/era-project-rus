@@ -79,7 +79,7 @@
 - Удалить папку с игрой;
 
 > [!NOTE]
-> ## Чтобы получить последнюю версию проекта, загрузите ее с [РЕЛИЗОВ](https://github.com/ERA-Projects/era-project-rus/releases/latest)
+> ## Чтобы получить последнюю версию проекта, загрузите ее из [РЕЛИЗОВ](https://github.com/ERA-Projects/era-project-rus/releases/latest)
 
 > [!TIP]
 > ## Для получения обновлений рекомендуется использовать [Heroes Launcher](https://github.com/HeroesLauncher/heroeslauncher/releases)
