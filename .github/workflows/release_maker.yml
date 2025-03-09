@@ -50,10 +50,20 @@ jobs:
     needs: check-version
     if: needs.check-version.outputs.NEW_VERSION == 'true'
     runs-on: ubuntu-latest
+    outputs:
+      VERSION: ${{ steps.set_version.outputs.VERSION }}
+      CLEAN_VERSION: ${{ steps.set_version.outputs.CLEAN_VERSION }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Set version output
+        id: set_version
+        run: |
+          echo "VERSION=${{ needs.check-version.outputs.VERSION }}" >> $GITHUB_ENV
+          echo "CLEAN_VERSION=${{ needs.check-version.outputs.CLEAN_VERSION }}" >> $GITHUB_ENV
+          echo "VERSION=${{ needs.check-version.outputs.VERSION }}" >> $GITHUB_OUTPUT
+          echo "CLEAN_VERSION=${{ needs.check-version.outputs.CLEAN_VERSION }}" >> $GITHUB_OUTPUT
       - name: Create archive
         run: |
           zip -r era-project-rus-${{ needs.check-version.outputs.VERSION }}.zip . -x ".git*" "some_large_folder/*"
@@ -92,3 +102,18 @@ jobs:
           gh release delete "${{ needs.check-version.outputs.VERSION }}" --yes --repo ERA-Projects/era-project-rus
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  post_changelog:
+    needs: release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Send Message to Discord
+        uses: appleboy/discord-action@master
+        with:
+          webhook_id: ${{ secrets.DISCORD_WEBHOOK_ID }}
+          webhook_token: ${{ secrets.DISCORD_WEBHOOK_TOKEN }}
+          message: "**Сборка в лаунчере обновлена до версии ${{ needs.release.outputs.VERSION }}**\nБольшое СПАСИБО за ваши донаты! Они стимулируют меня работать над сборкой!\n## [Список изменений на GitHub](<https://github.com/ERA-Projects/era-project-rus/blob/main/CHANGELOG.md#%D0%B2%D0%B5%D1%80%D1%81%D0%B8%D1%8F-${{ needs.release.outputs.CLEAN_VERSION }}>)\nЗапустите <#832999696858480670> для обновление игры."
+          file: "CHANGELOG.md"
