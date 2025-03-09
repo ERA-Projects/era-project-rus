@@ -1,13 +1,16 @@
 [![Github Downloads](https://img.shields.io/github/downloads/ERA-Projects/era-project-rus/total)](https://github.com/ERA-Projects/era-project-rus/releases)
 [![ERA Discord Invite](https://img.shields.io/discord/665742159307341827?color=%237289DA&label=chat&logo=discord&logoColor=white)](https://discord.gg/bvfJGZe)
-
-# ERA Project (Русская версия)
-## Этот репозиторий используется для разработки и публикации релизов **Русской версии** ERA Projects.
 > [!IMPORTANT]
 > ### [ERA Project (English version) repository](https://github.com/ERA-Projects/era-project-eng)
+# ERA Project (Русская версия)
+## Этот репозиторий используется для разработки и публикации релизов **Русской версии** ERA Projects.
 
+
+> ## [Список изменений](https://github.com/ERA-Projects/era-project-rus/blob/main/CHANGELOG.md)
 
 # Установка игры
+> [!NOTE]
+> ## Чтобы получить последнюю версию проекта, загрузите ее из [РЕЛИЗОВ](https://github.com/ERA-Projects/era-project-rus/releases/latest)
 ## 1. Автоматическая установка игры:
 - Скачать [Heroes Launcher отсюда](https://github.com/HeroesLauncher/heroeslauncher/releases) и установить **НЕ** в системную папку;
 - Выбрать вкладку "**ERA**" в списке игры;
@@ -55,6 +58,8 @@
 - Запустить файл ["h3era HD.exe"](h3era%20HD.exe), чтобы начать игру;
 
 # Обновление игры
+> [!TIP]
+> ## Для получения обновлений рекомендуется использовать [Heroes Launcher](https://github.com/HeroesLauncher/heroeslauncher/releases)
 ## 1. Автоматическое обновление игры:
 - Запустить установленный ранее [Heroes Launcher](https://github.com/HeroesLauncher/heroeslauncher/releases)
 - Нажать на кнопку "Шестерёнка" рядом с кнопкой "Играть";
@@ -77,10 +82,3 @@
 
 ## 2. Ручное удаление игры:
 - Удалить папку с игрой;
-
-> [!NOTE]
-> ## Чтобы получить последнюю версию проекта, загрузите ее из [РЕЛИЗОВ](https://github.com/ERA-Projects/era-project-rus/releases/latest)
-
-> [!TIP]
-> ## Для получения обновлений рекомендуется использовать [Heroes Launcher](https://github.com/HeroesLauncher/heroeslauncher/releases)
-> ## [Список изменений](https://github.com/ERA-Projects/era-project-rus/blob/main/CHANGELOG.md)
