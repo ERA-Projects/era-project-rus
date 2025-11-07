@@ -149,9 +149,9 @@ ERA предоставляет открытую платформу для соз
 
 ## 🖼️ Скриншоты
 
-| Главное меню | Диалоги | Генератор карт |
+| Главное меню | Мод "Трейнер" | Генератор карт |
 |--------------|----------|----------------|
-| ![Menu](https://raw.githubusercontent.com/ERA-Projects/era-project-rus/refs/heads/main/Help/Screens/era_main_menu.png) | ![Dialog](https://raw.githubusercontent.com/ERA-Projects/era-project-rus/refs/heads/main/Help/Screens/era_trainer_dlg.png) | ![Gen](https://raw.githubusercontent.com/ERA-Projects/era-project-rus/refs/heads/main/Help/Screens/era_rmg_settings.png) |
+| ![Menu](https://raw.githubusercontent.com/ERA-Projects/era-project-rus/refs/heads/main/Help/Screens/era_main_menu.png) | ![TrainerX Mod](https://raw.githubusercontent.com/ERA-Projects/era-project-rus/refs/heads/main/Help/Screens/era_trainer_dlg.png) | ![Gen](https://raw.githubusercontent.com/ERA-Projects/era-project-rus/refs/heads/main/Help/Screens/era_rmg_settings.png) |
 
 ---
 
@@ -176,4 +176,5 @@ ERA предоставляет открытую платформу для соз
 > 🏰 *ERA Project — это не просто мод, а платформа для бесконечного расширения Heroes III.*
 >  
 > Создавайте, экспериментируйте и вдохните новую жизнь в любимую игру!
+
 
