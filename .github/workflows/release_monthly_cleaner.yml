@@ -1,0 +1,74 @@
+name: "DEBUG: Smart Cleanup Dry Run"
+
+on:
+  workflow_dispatch: # Только ручной запуск для тестов
+
+jobs:
+  simulate-cleanup:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read # Для эмуляции достаточно прав на чтение
+
+    steps:
+      - name: Analyze and Simulate Deletion
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          echo "### Запуск эмуляции очистки ###"
+          
+          # Загружаем данные о релизах
+          RELEASES_JSON=$(gh api --paginate repos/${{ github.repository }}/releases \
+            --jq '[.[] | select(.draft == false) | {id: .id, tag: .tag_name, created: .created_at}]')
+
+          # Проверяем, есть ли вообще что анализировать
+          COUNT=$(echo "$RELEASES_JSON" | jq '. | length')
+          echo "Всего найдено опубликованных релизов: $COUNT"
+          
+          if [ "$COUNT" -le 10 ]; then
+            echo "Релизов 10 или меньше. Удалять нечего (защищенная зона)."
+            exit 0
+          fi
+
+          echo "--------------------------------------------------------"
+          echo "АНАЛИЗ СТАРЫХ РЕЛИЗОВ (старше 10 последних):"
+          
+          # Логика: берем всё после 10-го, сравниваем дату с предыдущим в списке (более новым)
+          echo "$RELEASES_JSON" | jq -c '.[10:] | to_entries[] | .as $curr | .key as $idx | (if $idx > 0 then (.[$idx - 1]) else null end) as $next | 
+            if $next != null then
+              ((($next.created | fromdateiso8601) - ($curr.value.created | fromdateiso8601)) / 86400) as $diff_days |
+              if $diff_days < 7 then
+                {id: $curr.value.id, tag: $curr.value.tag, days_until_next: $diff_days, action: "DELETE"}
+              else
+                {id: $curr.value.id, tag: $curr.value.tag, days_until_next: $diff_days, action: "KEEP"}
+              end
+            else
+              {id: $curr.value.id, tag: $curr.value.tag, action: "KEEP_OLDEST"}
+            end' | while read -r item; do
+            
+            TAG=$(echo "$item" | jq -r '.tag')
+            ACTION=$(echo "$item" | jq -r '.action')
+            DAYS=$(echo "$item" | jq -r '.days_until_next // "N/A"')
+
+            if [ "$ACTION" == "DELETE" ]; then
+              echo "[ЭМУЛЯЦИЯ] БУДЕТ УДАЛЕН: $TAG (интервал до след. релиза: ${DAYS} дн.)"
+            else
+              echo "[ЭМУЛЯЦИЯ] ОСТАЕТСЯ: $TAG (интервал до след. релиза: ${DAYS} дн. или это самый старый)"
+            fi
+          done
+
+      - name: Summary - What stays
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "--------------------------------------------------------"
+          echo "### Итоговый список релизов (как он будет выглядеть): ###"
+          # (Тут мы просто выводим то, что не попало бы под фильтр удаления)
+          # 1. Первые 10
+          # 2. Те, у кого интервал >= 7 дней
+          
+          gh api --paginate repos/${{ github.repository }}/releases \
+            --jq 'def logic: (.[10:] | to_entries[] | .as $curr | .key as $idx | (if $idx > 0 then (.[$idx - 1]) else null end) as $next | 
+                if $next != null then 
+                  if ((($next.created | fromdateiso8601) - ($curr.value.created | fromdateiso8601)) / 86400) >= 7 then $curr.value else empty end
+                else $curr.value end); 
+                [(.[:10][]), logic] | .[].tag_name'
