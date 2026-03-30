@@ -1,4 +1,4 @@
-name: "DEBUG: Smart Cleanup Dry Run (Fixed)"
+name: "DEBUG: Smart Cleanup Dry Run (Fixed V3)"
 
 on:
   workflow_dispatch:
@@ -16,38 +16,34 @@ jobs:
         run: |
           echo "### Загрузка данных о релизах... ###"
           
-          # Получаем список всех релизов в компактном JSON
+          # Получаем список всех релизов
           RELEASES_JSON=$(gh api --paginate repos/${{ github.repository }}/releases \
             --jq '[.[] | select(.draft == false) | {id: .id, tag: .tag_name, created: .created_at}]')
 
-          # Проверяем количество
           COUNT=$(echo "$RELEASES_JSON" | jq 'length')
           echo "Всего найдено опубликованных релизов: $COUNT"
 
           if [ "$COUNT" -le 10 ]; then
-            echo "Релизов 10 или меньше. Все остаются в сохранности."
+            echo "Релизов 10 или меньше. Удалять нечего."
             exit 0
           fi
 
           echo "--------------------------------------------------------"
           echo "АНАЛИЗ ИСТОРИИ (проверка интервалов):"
 
-          # Логика: 
-          # 1. Оставляем первые 10 (они не попадают в выборку .[10:])
-          # 2. Для остальных сравниваем дату с предыдущим (более новым) элементом
           echo "$RELEASES_JSON" | jq -r '
-            .[10:] as $old_ones |
             .[0:10] as $protected |
-            (range(0; $old_ones | length)) as $i |
+            .[10:] as $old_ones |
+            range(0; $old_ones | length) as $i |
             $old_ones[$i] as $curr |
-            (if $i > 0 then $old_ones[$i-1] else $protected[-1] end) as $next |
+            (if $i == 0 then $protected[-1] else $old_ones[$i-1] end) as $next |
             
             ((($next.created | fromdateiso8601) - ($curr.created | fromdateiso8601)) / 86400) as $days |
             
             if $days < 7 then
-              "[УДАЛЕНИЕ] Релиз \($curr.tag) (прожил \($days | Stout) дн. до след. релиза)"
+              "[УДАЛЕНИЕ] Релиз \($curr.tag) (прожил \($days | floor) дн. до следующего)"
             else
-              "[СОХРАНИТЬ] Релиз \($curr.tag) (прожил \($days | Stout) дн. — стабильный)"
+              "[СОХРАНИТЬ] Релиз \($curr.tag) (прожил \($days | floor) дн. — стабильный)"
             end
           '
 
@@ -62,14 +58,12 @@ jobs:
             --jq '
               .[0:10] as $top | 
               .[10:] as $rest |
-              [
-                $top[].tag_name,
-                (
-                  range(0; $rest | length) as $i |
-                  $rest[$i] as $curr |
-                  (if $i > 0 then $rest[$i-1] else $top[-1] end) as $next |
-                  if ((($next.created | fromdateiso8601) - ($curr.created | fromdateiso8601)) / 86400) >= 7 
-                  then $curr.tag_name else empty end
-                )
-              ] | .[]
+              $top[].tag_name,
+              (
+                range(0; $rest | length) as $i |
+                $rest[$i] as $curr |
+                (if $i == 0 then $top[-1] else $rest[$i-1] end) as $next |
+                if ((($next.created | fromdateiso8601) - ($curr.created | fromdateiso8601)) / 86400) >= 7 
+                then $curr.tag_name else empty end
+              )
             '
