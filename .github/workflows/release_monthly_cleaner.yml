@@ -1,4 +1,4 @@
-name: "DEBUG: Smart Cleanup Dry Run (Fixed V3)"
+name: "DEBUG: Smart Cleanup Dry Run (Final Fix)"
 
 on:
   workflow_dispatch:
@@ -24,13 +24,14 @@ jobs:
           echo "Всего найдено опубликованных релизов: $COUNT"
 
           if [ "$COUNT" -le 10 ]; then
-            echo "Релизов 10 или меньше. Удалять нечего."
+            echo "Релизов 10 или меньше. Все 10 последних остаются в сохранности."
             exit 0
           fi
 
           echo "--------------------------------------------------------"
-          echo "АНАЛИЗ ИСТОРИИ (проверка интервалов):"
+          echo "АНАЛИЗ ИСТОРИИ (начиная с 11-го релиза):"
 
+          # Выводим детальный лог анализа
           echo "$RELEASES_JSON" | jq -r '
             .[0:10] as $protected |
             .[10:] as $old_ones |
@@ -41,29 +42,28 @@ jobs:
             ((($next.created | fromdateiso8601) - ($curr.created | fromdateiso8601)) / 86400) as $days |
             
             if $days < 7 then
-              "[УДАЛЕНИЕ] Релиз \($curr.tag) (прожил \($days | floor) дн. до следующего)"
+              "[УДАЛЕНИЕ] Релиз \($curr.tag) (заменен через \($days | floor) дн.)"
             else
-              "[СОХРАНИТЬ] Релиз \($curr.tag) (прожил \($days | floor) дн. — стабильный)"
+              "[СОХРАНИТЬ] Релиз \($curr.tag) (был актуален \($days | floor) дн.)"
             end
           '
 
-      - name: Summary - Final State
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
           echo "--------------------------------------------------------"
-          echo "### ТАК БУДЕТ ВЫГЛЯДЕТЬ СПИСОК РЕЛИЗОВ ПОСЛЕ ОЧИСТКИ: ###"
-          
-          gh api --paginate repos/${{ github.repository }}/releases \
-            --jq '
-              .[0:10] as $top | 
-              .[10:] as $rest |
-              $top[].tag_name,
-              (
-                range(0; $rest | length) as $i |
-                $rest[$i] as $curr |
-                (if $i == 0 then $top[-1] else $rest[$i-1] end) as $next |
-                if ((($next.created | fromdateiso8601) - ($curr.created | fromdateiso8601)) / 86400) >= 7 
-                then $curr.tag_name else empty end
-              )
-            '
+          echo "### ИТОГОВЫЙ СПИСОК (что останется в репозитории): ###"
+
+          echo "$RELEASES_JSON" | jq -r '
+            .[0:10] as $protected |
+            .[10:] as $old_ones |
+            # Выводим 10 защищенных
+            ($protected[].tag),
+            # Выводим старые, которые прошли фильтр 7 дней
+            (
+              range(0; $old_ones | length) as $i |
+              $old_ones[$i] as $curr |
+              (if $i == 0 then $protected[-1] else $old_ones[$i-1] end) as $next |
+              if ((($next.created | fromdateiso8601) - ($curr.created | fromdateiso8601)) / 86400) >= 7 
+              then $curr.tag else empty end
+            ),
+            # Всегда сохраняем самый-самый старый релиз в истории (у него нет "следующего" для сравнения в цикле выше)
+            ($old_ones[-1].tag)
+          ' | uniq
