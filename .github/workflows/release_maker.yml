@@ -5,8 +5,8 @@ on:
       branches:
         - main
       paths:
-        - 'ERA_Project.ini' # Запуск только при изменении этого файла
-  workflow_dispatch: # Оставляем ручной запуск на всякий случай
+        - 'ERA_Project.ini' # Run only when this file is changed
+  workflow_dispatch: # Leave manual startup just in case
 
 jobs:
   check-version:
@@ -108,6 +108,12 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+
+      - name: Wait for server update
+        run: |
+          echo "Waiting 20 minutes for files to sync with the server..."
+          sleep 1200
+          echo "Time's up. Sending a notification."
 
       - name: Send Message to Discord
         uses: appleboy/discord-action@master
