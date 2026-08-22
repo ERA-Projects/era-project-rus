@@ -10,7 +10,7 @@ WoG Scripts
 WoG Scripts Rus
 WoG Fix Lite
 TrainerX
-ERA Scripts Rus
+ERA Scripts
 10SSkills
 AMER_HumanAI
 Enhanced Henchmen
